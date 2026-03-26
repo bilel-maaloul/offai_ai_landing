@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offa.ai — Stop Browsing the MLS. Start Acquiring on Autopilot.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        background: '#000000',
+                        foreground: 'hsl(210,15%,90%)',
+                        card: 'hsl(210,18%,10%)',
+                        border: 'hsl(210,12%,18%)',
+                        primary: 'rgba(75,226,103,0.5)',
+                        muted: { DEFAULT: 'hsl(210,12%,15%)', foreground: 'hsl(210,10%,55%)' },
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: hsl(210, 15%, 90%);
+        }
+
+        button {
+            background: initial;
+            border: none;
+            color: inherit;
+            font-family: inherit;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .bg-glow-radial {
+            background: radial-gradient(ellipse at 50% 40%, rgba(75, 226, 103, 0.12) 0%, transparent 65%);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .pulse-dot {
+            animation: pulse 1.4s infinite;
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #2A2B32 transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root" class="h-screen overflow-y-auto">
+
+        <!-- ═══ Navbar ═══ -->
+        <header class="sticky top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl">
+            <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-2">
+                <a href="#" class="flex items-center gap-1">
+                    <span class="text-2xl font-bold tracking-tight" style="color: #4be267;">Offa</span>
+                    <span class="text-2xl font-bold tracking-tight text-white">.ai</span>
+                </a>
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="#analysis"
+                        class="text-sm text-gray-400 hover:text-green-400 transition-colors">Analysis</a>
+                    <a href="#offers" class="text-sm text-gray-400 hover:text-green-400 transition-colors">Offers</a>
+                    <a href="#pipeline"
+                        class="text-sm text-gray-400 hover:text-green-400 transition-colors">Pipeline</a>
+                    <a href="#pricing" class="text-sm text-gray-400 hover:text-green-400 transition-colors">Pricing</a>
+                </nav>
+                <div class="flex items-center gap-4">
+                    <a href="#" class="hidden md:block text-sm text-gray-400 hover:text-white transition-colors">Log
+                        In</a>
+                    <a href="#" style="background: rgba(75,226,103,0.5); height: 33px; width: 80px; border-radius: 6px;"
+                        class="text-sm text-white hover:opacity-90 transition-opacity flex items-center justify-center">Try
+                        Free</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- ═══ Hero ═══ -->
+        <section class="relative overflow-hidden">
+            <div class="pointer-events-none absolute inset-0 bg-glow-radial"></div>
+            <div class="mx-auto max-w-3xl px-6 pt-28 pb-20 text-center relative">
+                <div
+                    class="mb-6 inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-1.5 text-xs font-medium text-green-400">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    Now scanning 127K+ properties daily
+                </div>
+
+                <h1 class="text-4xl font-bold leading-[1.1] sm:text-5xl lg:text-6xl tracking-tight text-white">
+                    Stop browsing the MLS.<br />
+                    <span class="text-green-400">Start acquiring on autopilot.</span>
+                </h1>
+                <p class="mt-6 text-lg text-gray-400 max-w-xl mx-auto leading-relaxed">
+                    Offa.ai analyzes every deal, sends offers automatically, and manages your pipeline from lead to
+                    close — so you never miss a deal again.
+                </p>
+
+                <!-- Rotating hook -->
+                <div class="mt-6 h-12 flex items-center justify-center">
+                    <p id="rotating-hook" class="text-sm text-green-400/80 italic max-w-md mx-auto fade-in"></p>
+                </div>
+
+                <!-- Email capture -->
+                <form id="waitlist-form" class="mt-8 mx-auto max-w-md flex gap-3">
+                    <div class="flex-1 relative">
+                        <i data-lucide="mail"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
+                        <input type="email" required placeholder="Enter your email"
+                            class="w-full h-12 pl-10 pr-4 rounded-xl border border-white/10 bg-white/5 text-sm text-white placeholder:text-gray-500 outline-none focus:border-green-500/50 transition-colors" />
+                    </div>
+                    <button type="submit"
+                        style="background: rgba(75,226,103,0.5); border-radius: 12px; padding: 0 24px;"
+                        class="h-12 text-sm font-semibold text-white hover:opacity-90 transition-opacity flex items-center gap-2 whitespace-nowrap">
+                        Get Early Access <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+                <div id="waitlist-success"
+                    class="mt-8 mx-auto max-w-md rounded-xl border border-green-500/30 bg-green-500/5 p-4 hidden">
+                    <div class="flex items-center justify-center gap-2 text-green-400">
+                        <i data-lucide="check" class="w-5 h-5"></i>
+                        <span class="font-medium">You're on the list!</span>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-400">We'll reach out soon with early access.</p>
+                </div>
+
+                <div class="mt-4 flex items-center justify-center gap-4 text-xs text-gray-500">
+                    <span>✓ No credit card</span>
+                    <span>✓ Free tier available</span>
+                    <span>✓ Cancel anytime</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Hero Demo — Automation Engine ═══ -->
+        <section class="pb-16">
+            <div class="mx-auto max-w-3xl px-6">
+                <div class="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden"
+                    style="box-shadow: 0 0 80px -20px rgba(75,226,103,0.12);">
+                    <div class="flex items-center gap-2 px-4 py-3 border-b border-white/10">
+                        <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
+                        <span class="ml-3 text-xs text-gray-500">offa.ai — automation engine</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <div class="flex items-center gap-2 text-sm"><i data-lucide="check"
+                                class="w-4 h-4 text-green-400 shrink-0"></i><span class="text-gray-400">Price drop
+                                detected: <span class="text-white">123 Oak St</span> — $485K → $429K</span></div>
+                        <div class="flex items-center gap-2 text-sm"><i data-lucide="check"
+                                class="w-4 h-4 text-green-400 shrink-0"></i><span class="text-gray-400">Deal scored:
+                                <span class="text-white">94/100</span> — ARV $612K, rehab est. $45K</span></div>
+                        <div class="flex items-center gap-2 text-sm"><i data-lucide="check"
+                                class="w-4 h-4 text-green-400 shrink-0"></i><span class="text-gray-400">Offer sent to
+                                listing agent: <span class="text-white">$385K, 21-day close</span></span></div>
+                        <div class="flex items-center gap-2 text-sm"><i data-lucide="clock"
+                                class="w-4 h-4 text-yellow-500 shrink-0"></i><span class="text-gray-400">Awaiting agent
+                                response… <span class="text-white">avg. &lt;30s</span></span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Stats ═══ -->
+        <div class="border-y border-white/10">
+            <div class="mx-auto max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-8 px-6 py-10">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-400">127K+</div>
+                    <div class="mt-1 text-xs text-gray-500">Properties Scanned Daily</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-400">&lt;90s</div>
+                    <div class="mt-1 text-xs text-gray-500">Avg. Deal Response</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-400">40%</div>
+                    <div class="mt-1 text-xs text-gray-500">Off-Market Coverage</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-400">12</div>
+                    <div class="mt-1 text-xs text-gray-500">Markets &amp; Growing</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ Section 1: AI Deal Analysis ═══ -->
+        <section id="analysis" class="py-24">
+            <div class="mx-auto max-w-5xl px-6">
+                <div class="text-center mb-16">
+                    <div
+                        class="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-1.5 text-xs font-medium text-green-400">
+                        <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                        AI analyzing 127K+ properties daily
+                    </div>
+                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-white">
+                        Stop guessing.<br /><span class="text-green-400">Start knowing.</span>
+                    </h2>
+                    <p class="mt-3 text-gray-400 max-w-lg mx-auto">
+                        Offa scores every lead, analyzes every comp, and tells you exactly why a deal is worth your time
+                        — or why it isn't. Data-driven decisions, zero gut feelings.
+                    </p>
+                </div>
+
+                <!-- Analysis demo card -->
+                <div class="mx-auto max-w-2xl mb-14 rounded-2xl border border-white/10 bg-white/[0.03] p-6"
+                    style="box-shadow: 0 0 60px -15px rgba(75,226,103,0.1);">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">AI Deal Analysis</p>
+                            <p class="text-lg font-semibold mt-1 text-white">742 Maple Drive, Austin TX</p>
+                        </div>
+                        <div
+                            class="flex h-14 w-14 items-center justify-center rounded-xl border border-green-500/30 bg-green-500/10">
+                            <div class="text-center"><span class="text-xl font-bold text-green-400">94</span>
+                                <p class="text-[10px] text-gray-500">/ 100</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="rounded-xl border border-white/10 bg-black/50 p-3">
+                            <p class="text-xs text-gray-500">Est. ARV</p>
+                            <p class="text-sm font-semibold mt-1 text-green-400">$612,000</p>
+                        </div>
+                        <div class="rounded-xl border border-white/10 bg-black/50 p-3">
+                            <p class="text-xs text-gray-500">Asking Price</p>
+                            <p class="text-sm font-semibold mt-1 text-white">$429,000</p>
+                        </div>
+                        <div class="rounded-xl border border-white/10 bg-black/50 p-3">
+                            <p class="text-xs text-gray-500">Est. Rehab</p>
+                            <p class="text-sm font-semibold mt-1 text-yellow-500">$45,000</p>
+                        </div>
+                        <div class="rounded-xl border border-white/10 bg-black/50 p-3">
+                            <p class="text-xs text-gray-500">Projected ROI</p>
+                            <p class="text-sm font-semibold mt-1 text-green-400">32.1%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature grid -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div
+                        class="flex gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-7 hover:border-green-500/20 transition-colors">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                            style="background: rgba(75,226,103,0.1);"><i data-lucide="trending-down" class="w-6 h-6"
+                                style="color: #4be267;"></i></div>
+                        <div>
+                            <h3 class="font-semibold mb-2 text-white">Price Drop Detection</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Instant alerts when properties drop below
+                                your threshold. Spot motivated sellers before anyone else.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-7 hover:border-green-500/20 transition-colors">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                            style="background: rgba(245,158,11,0.1);"><i data-lucide="bar-chart-3" class="w-6 h-6"
+                                style="color: #f59e0b;"></i></div>
+                        <div>
+                            <h3 class="font-semibold mb-2 text-white">ARV & Rehab Estimates</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Every deal comes with after-repair value,
+                                rehab cost estimates, and projected ROI — no spreadsheets.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-7 hover:border-green-500/20 transition-colors">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                            style="background: rgba(168,85,247,0.1);"><i data-lucide="target" class="w-6 h-6"
+                                style="color: #a855f7;"></i></div>
+                        <div>
+                            <h3 class="font-semibold mb-2 text-white">Days on Market Intelligence</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Spot stale listings and desperate sellers.
+                                AI flags properties sitting too long — your leverage to negotiate.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-7 hover:border-green-500/20 transition-colors">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                            style="background: rgba(59,130,246,0.1);"><i data-lucide="brain" class="w-6 h-6"
+                                style="color: #3b82f6;"></i></div>
+                        <div>
+                            <h3 class="font-semibold mb-2 text-white">Investor-Grade Scoring</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Cap rate, cash-on-cash, risk grade,
+                                neighborhood trajectory — every property scored like a pro.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Section 2: Offer Automation ═══ -->
+        <section id="offers" class="py-24 border-t border-white/10">
+            <div class="mx-auto max-w-5xl px-6">
+                <div class="text-center mb-16">
+                    <div
+                        class="mb-4 inline-flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/5 px-4 py-1.5 text-xs font-medium text-purple-400">
+                        <i data-lucide="bot" class="w-3.5 h-3.5"></i>
+                        AI-powered offer automation
+                    </div>
+                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-white">
+                        AI sends offers for you.<br /><span class="text-green-400">Automatically.</span>
+                    </h2>
+                    <p class="mt-3 text-gray-400 max-w-lg mx-auto">
+                        Every price drop triggers an instant offer. Offa watches the market 24/7 and fires offers in
+                        seconds — so you never miss a deal again.
+                    </p>
+                </div>
+
+                <!-- Agent chat demo image placeholder -->
+                <div class="mx-auto max-w-4xl mb-14">
+                    <div class="rounded-2xl border border-white/10 overflow-hidden bg-white/[0.02] p-8 text-center"
+                        style="box-shadow: 0 0 80px -20px rgba(75,226,103,0.15);">
+                        <div class="text-6xl mb-4">🤖💬</div>
+                        <p class="text-gray-400 text-sm">Offa AI negotiating with a listing agent — on autopilot.</p>
+                        <p class="text-gray-500 text-xs mt-2">(App screenshot would appear here)</p>
+                    </div>
+                </div>
+
+                <!-- Feature grid -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div
+                        class="flex gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-7 hover:border-green-500/20 transition-colors">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                            style="background: rgba(75,226,103,0.1);"><i data-lucide="message-square" class="w-6 h-6"
+                                style="color: #4be267;"></i></div>
+                        <div>
+                            <h3 class="font-semibold mb-2 text-white">Talks to Listing Agents for You</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Offa reaches out to listing agents on your
+                                behalf — asking about price flexibility, seller motivation, and deal terms.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-7 hover:border-green-500/20 transition-colors">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                            style="background: rgba(245,158,11,0.1);"><i data-lucide="handshake" class="w-6 h-6"
+                                style="color: #f59e0b;"></i></div>
+                        <div>
+                            <h3 class="font-semibold mb-2 text-white">Negotiates with Real Data</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">References comps, days on market, price
+                                history, and repair estimates to build a case the agent respects.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-7 hover:border-green-500/20 transition-colors">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                            style="background: rgba(168,85,247,0.1);"><i data-lucide="clock" class="w-6 h-6"
+                                style="color: #a855f7;"></i></div>
+                        <div>
+                            <h3 class="font-semibold mb-2 text-white">Responds in Seconds, Not Days</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">New listing hits the MLS? Offa contacts the
+                                agent before your competition even sees it. Speed wins deals.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="flex gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-7 hover:border-green-500/20 transition-colors">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+                            style="background: rgba(59,130,246,0.1);"><i data-lucide="shield" class="w-6 h-6"
+                                style="color: #3b82f6;"></i></div>
+                        <div>
+                            <h3 class="font-semibold mb-2 text-white">You Stay in Control</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Review every conversation. Set your max
+                                offer, preferred terms, and walk-away price. Offa executes — you decide.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example conversation -->
+                <div class="mx-auto max-w-3xl mt-14 rounded-2xl border border-white/10 bg-white/[0.02] p-6 space-y-4">
+                    <div class="flex items-center gap-3 pb-4 border-b border-white/10">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/10"><i
+                                data-lucide="bot" class="w-4 h-4 text-green-400"></i></div>
+                        <div>
+                            <p class="text-sm font-medium text-white">1842 Oak Lane, Austin TX · $425,000</p>
+                            <p class="text-xs text-gray-500">62 days on market · 2 price drops</p>
+                        </div>
+                        <span class="ml-auto text-xs font-medium px-3 py-1 rounded-full"
+                            style="background: rgba(245,158,11,0.15); color: #f59e0b;">Negotiating</span>
+                    </div>
+                    <!-- AI message -->
+                    <div class="flex gap-3">
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                            style="background: rgba(75,226,103,0.15); color: #4be267;">AI</div>
+                        <div class="max-w-[80%] rounded-2xl rounded-tl-sm px-4 py-3"
+                            style="background: rgba(75,226,103,0.06); border: 1px solid rgba(75,226,103,0.15);">
+                            <p class="text-xs font-medium mb-1" style="color: #4be267;">Offa AI</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">Hi Sarah — I'm reaching out on behalf of an
+                                investor client regarding 1842 Oak Lane, Austin TX. I noticed it's been on market 62
+                                days with a recent price reduction. Is the seller open to further negotiation?</p>
+                        </div>
+                    </div>
+                    <!-- Agent message -->
+                    <div class="flex gap-3 flex-row-reverse">
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                            style="background: rgba(168,85,247,0.15); color: #a855f7;">SA</div>
+                        <div class="max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-3"
+                            style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
+                            <p class="text-xs font-medium mb-1" style="color: #a855f7;">Sarah M. · Keller Williams</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">Hi! Yes, the seller is motivated. They'd
+                                consider offers in the low $400s. What does your client have in mind?</p>
+                        </div>
+                    </div>
+                    <!-- AI message -->
+                    <div class="flex gap-3">
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                            style="background: rgba(75,226,103,0.15); color: #4be267;">AI</div>
+                        <div class="max-w-[80%] rounded-2xl rounded-tl-sm px-4 py-3"
+                            style="background: rgba(75,226,103,0.06); border: 1px solid rgba(75,226,103,0.15);">
+                            <p class="text-xs font-medium mb-1" style="color: #4be267;">Offa AI</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">Based on recent comps at $388K–$395K and an
+                                estimated $35K in deferred maintenance, we'd like to submit at $385K with a 21-day
+                                close. Proof of funds is ready.</p>
+                        </div>
+                    </div>
+                    <!-- Agent message -->
+                    <div class="flex gap-3 flex-row-reverse">
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                            style="background: rgba(168,85,247,0.15); color: #a855f7;">SA</div>
+                        <div class="max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-3"
+                            style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
+                            <p class="text-xs font-medium mb-1" style="color: #a855f7;">Sarah M. · Keller Williams</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">I'll present that to my seller today. Can
+                                you send the POF to my email?</p>
+                        </div>
+                    </div>
+                    <!-- AI message -->
+                    <div class="flex gap-3">
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                            style="background: rgba(75,226,103,0.15); color: #4be267;">AI</div>
+                        <div class="max-w-[80%] rounded-2xl rounded-tl-sm px-4 py-3"
+                            style="background: rgba(75,226,103,0.06); border: 1px solid rgba(75,226,103,0.15);">
+                            <p class="text-xs font-medium mb-1" style="color: #4be267;">Offa AI</p>
+                            <p class="text-sm text-gray-400 leading-relaxed">Sent. We're flexible on closing timeline if
+                                that helps. Looking forward to hearing back.</p>
+                        </div>
+                    </div>
+                    <!-- Typing indicator -->
+                    <div class="flex gap-3">
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                            style="background: rgba(168,85,247,0.15); color: #a855f7;">SA</div>
+                        <div class="rounded-2xl rounded-tl-sm px-4 py-3"
+                            style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
+                            <div class="flex gap-1">
+                                <span class="w-2 h-2 rounded-full bg-gray-500/40 pulse-dot"></span>
+                                <span class="w-2 h-2 rounded-full bg-gray-500/40 pulse-dot"
+                                    style="animation-delay: 0.2s;"></span>
+                                <span class="w-2 h-2 rounded-full bg-gray-500/40 pulse-dot"
+                                    style="animation-delay: 0.4s;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Section 3: Pipeline ═══ -->
+        <section id="pipeline" class="py-24 border-t border-white/10">
+            <div class="mx-auto max-w-5xl px-6">
+                <div class="text-center mb-16">
+                    <div
+                        class="mb-4 inline-flex items-center gap-2 rounded-full border border-yellow-500/20 bg-yellow-500/5 px-4 py-1.5 text-xs font-medium text-yellow-500">
+                        <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i>
+                        3,200+ investors managing deals with Offa
+                    </div>
+                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-white">
+                        One pipeline.<br /><span class="text-green-400">Every deal. Total control.</span>
+                    </h2>
+                    <p class="mt-3 text-gray-400 max-w-lg mx-auto">
+                        From lead to close, Offa manages your entire deal flow. Track offers, follow up automatically,
+                        and never let a deal slip through the cracks.
+                    </p>
+                </div>
+
+                <!-- Pipeline demo -->
+                <div class="mx-auto max-w-4xl mb-14 rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden"
+                    style="box-shadow: 0 0 60px -15px rgba(75,226,103,0.1);">
+                    <div class="flex items-center gap-2 px-4 py-3 border-b border-white/10">
+                        <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
+                        <span class="ml-3 text-xs text-gray-500">offa.ai — deal pipeline</span>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6">
+                        <div class="text-center">
+                            <p class="text-[10px] uppercase tracking-wider text-gray-500 mb-3">NEW LEADS</p>
+                            <div class="rounded-xl border border-white/10 bg-black/50 p-4">
+                                <p class="text-sm font-semibold text-white">123 Oak St</p>
+                                <p class="text-xs mt-1 text-green-400">Score: 94</p>
+                                <p class="text-xs text-gray-500 mt-1">$429K</p>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[10px] uppercase tracking-wider text-gray-500 mb-3">OFFER SENT</p>
+                            <div class="rounded-xl border border-white/10 bg-black/50 p-4">
+                                <p class="text-sm font-semibold text-white">789 Elm Blvd</p>
+                                <p class="text-xs mt-1 text-yellow-500">Pending</p>
+                                <p class="text-xs text-gray-500 mt-1">$510K</p>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[10px] uppercase tracking-wider text-gray-500 mb-3">NEGOTIATING</p>
+                            <div class="rounded-xl border border-white/10 bg-black/50 p-4">
+                                <p class="text-sm font-semibold text-white">321 Cedar Ln</p>
+                                <p class="text-xs mt-1 text-yellow-500">Counter: $385K</p>
+                                <p class="text-xs text-gray-500 mt-1">Listed $410K</p>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[10px] uppercase tracking-wider text-gray-500 mb-3">CLOSING</p>
+                            <div class="rounded-xl border border-white/10 bg-black/50 p-4">
+                                <p class="text-sm font-semibold text-white">654 Birch Dr</p>
+                                <p class="text-xs mt-1 text-green-400">Accepted ✓</p>
+                                <p class="text-xs text-gray-500 mt-1">$298K</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Three steps -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div
+                        class="rounded-2xl border border-white/10 bg-white/[0.03] p-8 hover:border-green-500/20 transition-colors">
+                        <div class="flex items-center gap-4 mb-5">
+                            <span class="text-3xl font-bold" style="color: rgba(75,226,103,0.3);">01</span>
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl"
+                                style="background: rgba(75,226,103,0.1);"><i data-lucide="brain" class="w-5 h-5"
+                                    style="color: #4be267;"></i></div>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-3 text-white">Describe Your Ideal Deal</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Plain English. No dropdowns, no 47 filters.
+                            Just tell Offa what you're looking for and it builds your buy box automatically.</p>
+                    </div>
+                    <div
+                        class="rounded-2xl border border-white/10 bg-white/[0.03] p-8 hover:border-green-500/20 transition-colors">
+                        <div class="flex items-center gap-4 mb-5">
+                            <span class="text-3xl font-bold" style="color: rgba(168,85,247,0.3);">02</span>
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl"
+                                style="background: rgba(168,85,247,0.1);"><i data-lucide="eye" class="w-5 h-5"
+                                    style="color: #a855f7;"></i></div>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-3 text-white">Offa Scans Everything</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">MLS, pocket listings, pre-foreclosures, FSBO,
+                            auctions — your agent works every angle simultaneously, 24/7.</p>
+                    </div>
+                    <div
+                        class="rounded-2xl border border-white/10 bg-white/[0.03] p-8 hover:border-green-500/20 transition-colors">
+                        <div class="flex items-center gap-4 mb-5">
+                            <span class="text-3xl font-bold" style="color: rgba(245,158,11,0.3);">03</span>
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl"
+                                style="background: rgba(245,158,11,0.1);"><i data-lucide="zap" class="w-5 h-5"
+                                    style="color: #f59e0b;"></i></div>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-3 text-white">Get Deals, Not Data</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Each match comes with ARV estimates, financing
+                            paths, and a risk score. You get a verdict, not a spreadsheet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Who is this for ═══ -->
+        <section class="py-24 border-t border-white/10">
+            <div class="mx-auto max-w-4xl px-6">
+                <div class="text-center mb-14">
+                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-white">
+                        Built for <span class="text-green-400">serious investors.</span>
+                    </h2>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-7 text-center">
+                        <div class="text-4xl mb-4">🔨</div>
+                        <h3 class="font-semibold mb-2 text-white">Flippers</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Find undervalued properties with high ARV
+                            potential. Get rehab estimates and projected profit on every deal.</p>
+                    </div>
+                    <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-7 text-center">
+                        <div class="text-4xl mb-4">🏠</div>
+                        <h3 class="font-semibold mb-2 text-white">Buy & Hold</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Spot cash-flowing rentals with strong cap
+                            rates. Filter by neighborhood trajectory and tenant demand.</p>
+                    </div>
+                    <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-7 text-center">
+                        <div class="text-4xl mb-4">📋</div>
+                        <h3 class="font-semibold mb-2 text-white">Wholesalers</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Identify motivated sellers fast. Get comps,
+                            ARV, and assignment fee potential before you make the move.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Pricing ═══ -->
+        <section id="pricing" class="py-24 border-t border-white/10">
+            <div class="mx-auto max-w-6xl px-6">
+                <div class="text-center mb-14">
+                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-white">
+                        Simple pricing. <span class="text-green-400">Real value.</span>
+                    </h2>
+                    <p class="mt-3 text-gray-400">From solo investors to enterprise lenders — pick the plan that fits.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    <!-- Free -->
+                    <div class="relative rounded-2xl p-8 flex flex-col bg-white/[0.03]"
+                        style="border: 2px solid rgba(255,255,255,0.1); overflow: visible;">
+                        <div class="mb-6">
+                            <h3 class="text-sm font-medium" style="color: hsl(210,10%,55%);">Free</h3>
+                            <div class="mt-2"><span class="text-3xl font-bold text-white">Free</span></div>
+                            <p class="mt-1 text-xs text-gray-500">For individuals getting started</p>
+                        </div>
+                        <div class="space-y-3 flex-1 mb-8">
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(150,150,150,0.6);"></i><span class="text-gray-400">Up to 3 AI
+                                    deal searches</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(150,150,150,0.6);"></i><span class="text-gray-400">Browse
+                                    delivered deal results</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(150,150,150,0.6);"></i><span class="text-gray-400">Create a buy
+                                    box</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(150,150,150,0.6);"></i><span class="text-gray-400">Quality buy
+                                    signals: time on market, price drops</span></div>
+                        </div>
+                        <a href="#" style="background: hsl(210,12%,15%); height: 45px; border-radius: 6px;"
+                            class="w-full text-base font-semibold text-white hover:opacity-80 border border-white/10 flex items-center justify-center">Start
+                            Searching</a>
+                    </div>
+                    <!-- Plus -->
+                    <div class="relative rounded-2xl p-8 flex flex-col"
+                        style="border: 2px solid rgba(75,226,103,0.5); overflow: visible; background: rgba(255,255,255,0.04); box-shadow: 0 0 60px -15px rgba(75,226,103,0.15);">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-xs font-bold text-white shadow-lg"
+                            style="background: #1a5c2e; border: 2px solid rgba(75,226,103,0.6); box-shadow: 0 10px 15px -3px rgba(75,226,103,0.3); z-index: 10;">
+                            Popular</div>
+                        <div class="mb-6">
+                            <h3 class="text-sm font-medium" style="color: #4be267;">Plus</h3>
+                            <div class="mt-2 flex items-baseline gap-1"><span
+                                    class="text-3xl font-bold text-white">$20</span><span
+                                    class="text-sm text-gray-500">/mo</span></div>
+                            <p class="mt-1 text-xs text-gray-500">Serious tools for serious investors</p>
+                        </div>
+                        <div class="space-y-3 flex-1 mb-8">
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(75,226,103,0.8);"></i><span class="text-gray-400">Unlimited AI
+                                    deal searches</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(75,226,103,0.8);"></i><span class="text-gray-400">Save & track
+                                    properties on your watchlist</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(75,226,103,0.8);"></i><span class="text-gray-400">Price drop,
+                                    contract & status notifications</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(75,226,103,0.8);"></i><span class="text-gray-400">Connect with
+                                    private lenders for funding</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(75,226,103,0.8);"></i><span class="text-gray-400">Ongoing AI
+                                    alerts matched to your buy box</span></div>
+                        </div>
+                        <a href="#" style="background: rgba(75,226,103,0.5); height: 45px; border-radius: 6px;"
+                            class="w-full text-base font-semibold text-white hover:opacity-90 hover:shadow-lg flex items-center justify-center">Get
+                            Plus</a>
+                    </div>
+                    <!-- Business -->
+                    <div class="relative rounded-2xl p-8 flex flex-col bg-white/[0.03]"
+                        style="border: 2px solid rgba(168,85,247,0.4); overflow: visible;">
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-xs font-bold text-white shadow-lg"
+                            style="background: #3b1a6e; border: 2px solid rgba(168,85,247,0.6); box-shadow: 0 10px 15px -3px rgba(168,85,247,0.2); z-index: 10;">
+                            Business</div>
+                        <div class="mb-6">
+                            <h3 class="text-sm font-medium" style="color: rgba(168,85,247,0.9);">Business</h3>
+                            <div class="mt-2 flex items-baseline gap-1"><span
+                                    class="text-3xl font-bold text-white">$20</span><span
+                                    class="text-sm text-gray-500">/user/mo</span></div>
+                            <p class="mt-1 text-xs text-gray-500">For lenders & organizations (250+ seats)</p>
+                        </div>
+                        <div class="space-y-3 flex-1 mb-8">
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(168,85,247,0.8);"></i><span class="text-gray-400">Everything in
+                                    Plus, for your entire team</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(168,85,247,0.8);"></i><span class="text-gray-400">Full visibility
+                                    into all user activity</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(168,85,247,0.8);"></i><span class="text-gray-400">Admin dashboard
+                                    to manage team usage</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(168,85,247,0.8);"></i><span class="text-gray-400">Dedicated
+                                    account manager</span></div>
+                            <div class="flex items-center gap-3 text-sm"><i data-lucide="check" class="w-4 h-4 shrink-0"
+                                    style="color: rgba(168,85,247,0.8);"></i><span class="text-gray-400">Custom
+                                    integrations & API access</span></div>
+                        </div>
+                        <a href="#" style="background: rgba(168,85,247,0.4); height: 45px; border-radius: 6px;"
+                            class="w-full text-base font-semibold text-white hover:opacity-90 hover:shadow-lg flex items-center justify-center">Get
+                            Started</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Final CTA ═══ -->
+        <section class="py-24 border-t border-white/10">
+            <div class="mx-auto max-w-2xl px-6 text-center">
+                <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-white">
+                    Your next deal is already out there.
+                </h2>
+                <p class="mt-4 text-gray-400">Let Offa find it, analyze it, and send the offer — before someone else
+                    does.</p>
+                <form id="waitlist-form-bottom" class="mt-10 mx-auto max-w-md flex gap-3">
+                    <div class="flex-1 relative">
+                        <i data-lucide="mail"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500"></i>
+                        <input type="email" required placeholder="Enter your email"
+                            class="w-full h-12 pl-10 pr-4 rounded-xl border border-white/10 bg-white/5 text-sm text-white placeholder:text-gray-500 outline-none focus:border-green-500/50 transition-colors" />
+                    </div>
+                    <button type="submit"
+                        style="background: rgba(75,226,103,0.5); border-radius: 12px; padding: 0 24px;"
+                        class="h-12 text-sm font-semibold text-white hover:opacity-90 transition-opacity flex items-center gap-2 whitespace-nowrap">
+                        Get Early Access <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+                <div id="waitlist-success-bottom"
+                    class="mt-10 mx-auto max-w-md rounded-xl border border-green-500/30 bg-green-500/5 p-4 hidden">
+                    <div class="flex items-center justify-center gap-2 text-green-400">
+                        <i data-lucide="check" class="w-5 h-5"></i>
+                        <span class="font-medium">You're on the list!</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Footer ═══ -->
+        <footer class="border-t border-white/10">
+            <div class="mx-auto max-w-6xl px-6 py-10">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+                    <div>
+                        <h4 class="text-sm font-semibold text-white mb-4">Product</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#analysis"
+                                    class="text-sm text-gray-500 hover:text-white transition-colors">Deal Analysis</a>
+                            </li>
+                            <li><a href="#offers" class="text-sm text-gray-500 hover:text-white transition-colors">Offer
+                                    Automation</a></li>
+                            <li><a href="#pipeline"
+                                    class="text-sm text-gray-500 hover:text-white transition-colors">Pipeline</a></li>
+                            <li><a href="#pricing"
+                                    class="text-sm text-gray-500 hover:text-white transition-colors">Pricing</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-white mb-4">Business</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#pricing"
+                                    class="text-sm text-gray-500 hover:text-white transition-colors">Pricing</a></li>
+                            <li><a href="#" class="text-sm text-gray-500 hover:text-white transition-colors">About</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-white mb-4">Contact Us</h4>
+                        <ul class="space-y-3">
+                            <li><a href="mailto:hello@offa.com"
+                                    class="text-sm text-gray-500 hover:text-white transition-colors">hello@offa.com</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-white mb-4">Legal</h4>
+                        <ul class="space-y-3">
+                            <li><a href="https://offa.com/privacy-policy/"
+                                    class="text-sm text-gray-500 hover:text-white transition-colors">Privacy</a></li>
+                            <li><a href="https://offa.com/terms-of-service/"
+                                    class="text-sm text-gray-500 hover:text-white transition-colors">Terms</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-white/10">
+                    <a href="#" class="flex items-center gap-1">
+                        <span class="text-2xl font-bold" style="color: #4be267;">Offa</span>
+                        <span class="text-2xl font-bold text-white">.ai</span>
+                    </a>
+                    <p class="text-sm text-gray-500">©2026 Offa. Built for investors, by investors. ❤️</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Rotating hero hooks
+        const hooks = [
+            "What if every price drop triggered an AI instant offer… automatically?",
+            "Stop browsing the MLS. Start sending offers on autopilot.",
+            "Your competitors are already automating MLS offers. Why aren't you?",
+            "What if AI could find discounted MLS deals and send offers for you — 24/7?",
+            "What if our AI could negotiate up to 30% off MLS price for a deal you want?",
+        ];
+        let hookIdx = 0;
+        const hookEl = document.getElementById('rotating-hook');
+        function showHook() {
+            hookEl.style.opacity = '0';
+            hookEl.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                hookEl.textContent = '"' + hooks[hookIdx] + '"';
+                hookEl.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                hookEl.style.opacity = '1';
+                hookEl.style.transform = 'translateY(0)';
+                hookIdx = (hookIdx + 1) % hooks.length;
+            }, 200);
+        }
+        showHook();
+        setInterval(showHook, 4000);
+
+        // Waitlist form handling
+        function handleForm(formId, successId) {
+            const form = document.getElementById(formId);
+            const success = document.getElementById(successId);
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    form.classList.add('hidden');
+                    success.classList.remove('hidden');
+                });
+            }
+        }
+        handleForm('waitlist-form', 'waitlist-success');
+        handleForm('waitlist-form-bottom', 'waitlist-success-bottom');
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', (e) => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+            });
+        });
+    </script>
+</body>
+
+</html>

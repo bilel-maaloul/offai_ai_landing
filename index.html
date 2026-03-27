@@ -244,11 +244,10 @@
                 <p class="mt-4 text-center text-xs text-gray-500">Offa AI negotiating a price reduction with a listing
                     agent — on autopilot.</p>
             </div>
-            <!-- Mobile version — full width, no padding, no border radius -->
-            <div class="md:hidden w-full">
-                <div class="overflow-hidden"
-                    style="box-shadow: 0 0 80px -20px rgba(75,226,103,0.15);">
-                    <video autoplay muted loop playsinline class="w-full h-auto">
+            <!-- Mobile version — full width, edge to edge -->
+            <div class="md:hidden w-screen relative left-1/2 -translate-x-1/2">
+                <div class="overflow-hidden">
+                    <video autoplay muted loop playsinline class="w-full h-auto" style="min-height: 60vh; object-fit: cover;">
                         <source src="mobile version.mp4" type="video/mp4" />
                     </video>
                 </div>

@@ -74,14 +74,9 @@
             scrollbar-color: #2A2B32 transparent;
         }
 
-        /* Controlled scroll-snap */
+        /* Smooth scroll */
         #root {
-            scroll-snap-type: y proximity;
             scroll-behavior: smooth;
-        }
-
-        .snap-section {
-            scroll-snap-align: start;
         }
 
         /* Fade-in on scroll */
@@ -197,7 +192,7 @@
         <!-- ═══ HERO ═══ -->
         <section class="snap-section relative overflow-hidden">
             <div class="pointer-events-none absolute inset-0 bg-glow-radial"></div>
-            <div class="mx-auto max-w-5xl px-6 pt-28 pb-20 text-center relative">
+            <div class="mx-auto max-w-5xl px-6 pt-28 pb-10 text-center relative">
                 <div
                     class="mb-6 inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-1.5 text-xs font-medium text-green-400">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
@@ -237,29 +232,33 @@
         </section>
 
         <!-- ═══ Hero Demo — Videos (PC / Mobile) ═══ -->
-        <section class="snap-section reveal pb-16">
-            <div class="mx-auto max-w-4xl px-6">
-                <!-- PC version — hidden on mobile -->
-                <div class="hidden md:block rounded-2xl border border-white/10 overflow-hidden"
+        <section class="snap-section reveal">
+            <!-- PC version — hidden on mobile -->
+            <div class="hidden md:block mx-auto max-w-4xl px-6">
+                <div class="rounded-2xl border border-white/10 overflow-hidden"
                     style="box-shadow: 0 0 80px -20px rgba(75,226,103,0.15);">
                     <video autoplay muted loop playsinline class="w-full h-auto">
                         <source src="pc version.mp4" type="video/mp4" />
                     </video>
                 </div>
-                <!-- Mobile version — hidden on desktop -->
-                <div class="md:hidden rounded-2xl border border-white/10 overflow-hidden"
+                <p class="mt-4 text-center text-xs text-gray-500">Offa AI negotiating a price reduction with a listing
+                    agent — on autopilot.</p>
+            </div>
+            <!-- Mobile version — full width, no padding, no border radius -->
+            <div class="md:hidden w-full">
+                <div class="overflow-hidden"
                     style="box-shadow: 0 0 80px -20px rgba(75,226,103,0.15);">
                     <video autoplay muted loop playsinline class="w-full h-auto">
                         <source src="mobile version.mp4" type="video/mp4" />
                     </video>
                 </div>
-                <p class="mt-4 text-center text-xs text-gray-500">Offa AI negotiating a price reduction with a listing
+                <p class="mt-4 text-center text-xs text-gray-500 px-4">Offa AI negotiating a price reduction with a listing
                     agent — on autopilot.</p>
             </div>
         </section>
 
         <!-- ═══ Stats ═══ -->
-        <div class="snap-section reveal border-y border-white/10">
+        <div class="snap-section-auto reveal border-y border-white/10">
             <div class="mx-auto max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-8 px-6 py-10">
                 <div class="text-center">
                     <div class="text-2xl font-bold text-green-400">5M+</div>
@@ -681,7 +680,7 @@
         </section>
 
         <!-- ═══ Footer ═══ -->
-        <footer class="snap-section border-t border-white/10">
+        <footer class="snap-section-auto border-t border-white/10">
             <div class="mx-auto max-w-6xl px-6 py-10">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                     <a href="#" class="flex items-center gap-1">
@@ -741,6 +740,7 @@
 
         // Section dot navigation
         const sections = document.querySelectorAll('.snap-section');
+        const allSnap = document.querySelectorAll('.snap-section, .snap-section-auto');
         const dotNav = document.getElementById('dot-nav');
         sections.forEach((sec, i) => {
             const dot = document.createElement('button');

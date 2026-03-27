@@ -204,7 +204,7 @@
             
                 <a href="#get-access"
                     style="background: rgba(75,226,103,0.5); height: 33px; padding: 0 20px; border-radius: 6px;"
-                    class="text-sm text-white hover:opacity-90 transition-opacity flex items-center justify-center nav-link" data-target="5">Get
+                    class="text-sm text-white hover:opacity-90 transition-opacity flex items-center justify-center nav-link" data-target="6">Get
                     Early Access</a>
             </div>
         </header>
@@ -254,9 +254,10 @@
         </section>
 
         <!-- Section 1: Video + Stats -->
+        <!-- Section 1: Video -->
         <section class="page-section reveal">
-            <!-- PC version — hidden on mobile -->
-            <div class="hidden md:flex flex-col justify-center items-center h-full">
+            <!-- PC version -->
+            <div class="hidden md:flex items-center justify-center h-full">
                 <div class="mx-auto max-w-4xl px-6">
                     <div class="rounded-2xl border border-white/10 overflow-hidden"
                         style="box-shadow: 0 0 80px -20px rgba(75,226,103,0.15);">
@@ -264,61 +265,41 @@
                             <source src="pc version.mp4" type="video/mp4" />
                         </video>
                     </div>
-                    <p class="mt-4 text-center text-xs text-gray-500">Offa AI negotiating a price reduction with a listing
-                        agent — on autopilot.</p>
-                </div>
-                <div class="w-full border-t border-white/10 mt-10">
-                    <div class="mx-auto max-w-4xl grid grid-cols-4 gap-8 px-6 py-8">
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-green-400">5M+</div>
-                            <div class="mt-1 text-xs text-gray-500">Properties Scanned Daily</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-green-400">400K+</div>
-                            <div class="mt-1 text-xs text-gray-500">Offers Sent Daily</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-green-400">2M+</div>
-                            <div class="mt-1 text-xs text-gray-500">Agent Connections</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-bold text-green-400">Nationwide</div>
-                            <div class="mt-1 text-xs text-gray-500">Market Coverage</div>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <!-- Mobile version — full width -->
-            <div class="md:hidden flex flex-col h-full">
-                <div class="flex-1 overflow-hidden">
-                    <video autoplay muted loop playsinline class="w-full h-full object-cover object-top">
-                        <source src="mobile version.mp4" type="video/mp4" />
-                    </video>
-                </div>
-                <div class="w-full border-t border-white/10">
-                    <div class="grid grid-cols-2 gap-4 px-4 py-3">
-                        <div class="text-center">
-                            <div class="text-xl font-bold text-green-400">5M+</div>
-                            <div class="mt-1 text-[10px] text-gray-500">Properties Scanned Daily</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-xl font-bold text-green-400">400K+</div>
-                            <div class="mt-1 text-[10px] text-gray-500">Offers Sent Daily</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-xl font-bold text-green-400">2M+</div>
-                            <div class="mt-1 text-[10px] text-gray-500">Agent Connections</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-xl font-bold text-green-400">Nationwide</div>
-                            <div class="mt-1 text-[10px] text-gray-500">Market Coverage</div>
-                        </div>
+            <!-- Mobile version -->
+            <div class="md:hidden h-full overflow-hidden">
+                <video autoplay muted loop playsinline class="w-full h-full object-cover object-top">
+                    <source src="mobile version.mp4" type="video/mp4" />
+                </video>
+            </div>
+        </section>
+
+        <!-- Section 2: Stats -->
+        <section class="page-section reveal flex items-center justify-center border-y border-white/10">
+            <div class="mx-auto max-w-4xl w-full px-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-10">
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-green-400">5M+</div>
+                        <div class="mt-2 text-sm text-gray-500">Properties Scanned Daily</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-green-400">400K+</div>
+                        <div class="mt-2 text-sm text-gray-500">Offers Sent Daily</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-green-400">2M+</div>
+                        <div class="mt-2 text-sm text-gray-500">Agent Connections</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold text-green-400">Nationwide</div>
+                        <div class="mt-2 text-sm text-gray-500">Market Coverage</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2: Analysis -->
+        <!-- Section 3: Analysis -->
         <section id="analysis" class="page-section reveal">
             <div class="mx-auto max-w-5xl px-6 py-20">
                 <div class="text-center mb-16">
@@ -724,7 +705,7 @@
                     <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                         <a href="#" class="flex items-center gap-1">
                             <span class="text-2xl font-bold" style="color: #4be267;">Offa</span>
-                            <span class="text-2xl font-bold text-white">.ai</span>
+                            <span class="text-2xl font-bold text-white">Ai</span>
                         </a>
                         <div class="flex items-center gap-6">
                             <a href="https://offa.com/privacy-policy/"

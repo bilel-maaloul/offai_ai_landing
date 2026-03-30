@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="icon" type="image/jpg" href="offa.jpg">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -75,27 +74,11 @@
             scrollbar-color: #2A2B32 transparent;
         }
 
-        /* Sectional scroll */
         html, body {
-            overflow: hidden;
-            height: 100%;
-        }
-
-        #root {
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-
-        #sections-wrapper {
-            transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-            will-change: transform;
+            overflow-x: hidden;
         }
 
         .page-section {
-            height: 100vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
             position: relative;
         }
 
@@ -109,45 +92,6 @@
         .reveal.visible {
             opacity: 1;
             transform: translateY(0);
-        }
-
-        /* Dot navigation */
-        #dot-nav {
-            position: fixed;
-            right: 24px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        #dot-nav .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            padding: 0;
-            cursor: pointer;
-        }
-
-        #dot-nav .dot.active {
-            background: #4be267;
-            border-color: #4be267;
-            box-shadow: 0 0 8px rgba(75, 226, 103, 0.4);
-        }
-
-        #dot-nav .dot:hover {
-            background: rgba(75, 226, 103, 0.5);
-            border-color: rgba(75, 226, 103, 0.5);
-        }
-
-        @media (max-width: 768px) {
-            #dot-nav { right: 12px; }
-            #dot-nav .dot { width: 8px; height: 8px; }
         }
 
         /* Sticky floating CTA */
@@ -172,8 +116,6 @@
 </head>
 
 <body>
-    <nav id="dot-nav" aria-label="Section navigation"></nav>
-
     <!-- Sticky floating waitlist CTA -->
     <div id="sticky-cta">
         <form id="waitlist-sticky" class="mx-auto max-w-md flex items-center gap-3">
@@ -193,7 +135,7 @@
         </div>
     </div>
 
-    <div id="root" class="h-screen overflow-hidden">
+    <div id="root">
 
         <!-- ═══ Navbar ═══ -->
         <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl">
@@ -205,19 +147,17 @@
             
                 <a href="#get-access"
                     style="background: rgba(75,226,103,0.5); height: 33px; padding: 0 20px; border-radius: 6px;"
-                    class="text-sm text-white hover:opacity-90 transition-opacity flex items-center justify-center nav-link" data-target="6">Get
+                    class="text-sm text-white hover:opacity-90 transition-opacity flex items-center justify-center nav-link">Get
                     Early Access</a>
             </div>
         </header>
 
-        <div id="sections-wrapper">
-
         <!-- Section 0: HERO -->
-        <section class="page-section relative overflow-hidden">
+        <section class="page-section relative overflow-hidden min-h-screen">
             <div class="pointer-events-none absolute inset-0 bg-glow-radial"></div>
-            <div class="mx-auto max-w-5xl px-6 pt-28 pb-10 text-center relative flex flex-col justify-center h-full">
+            <div class="mx-auto max-w-5xl px-6 pt-28 pb-10 text-center relative flex flex-col items-center justify-center min-h-screen">
                 <div
-                    class="mb-6 inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-1.5 text-xs font-medium text-green-400">
+                    class="mb-6 flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-1.5 text-xs font-medium text-green-400 w-fit">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
                     Now scanning 5M+ properties daily
                 </div>
@@ -254,53 +194,67 @@
             </div>
         </section>
 
-        <!-- Section 1: Video + Stats -->
-        <!-- Section 1: Video -->
-        <section class="page-section reveal">
-            <!-- PC version -->
-            <div class="hidden md:flex items-center justify-center h-full">
-                <div class="mx-auto max-w-4xl px-6">
-                    <div class="rounded-2xl border border-white/10 overflow-hidden"
-                        style="box-shadow: 0 0 80px -20px rgba(75,226,103,0.15);">
-                        <video autoplay muted loop playsinline class="w-full h-auto">
-                            <source src="pc version.mp4" type="video/mp4" />
-                        </video>
+        <!-- Section 1: Video + Stats (combined) -->
+        <section class="page-section reveal flex flex-col min-h-screen">
+            <!-- PC version — full screen -->
+            <div class="hidden md:flex items-center justify-center flex-1 relative">
+                <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                    <source src="pc version.mp4" type="video/mp4" />
+                </video>
+                <!-- Stats overlay at bottom -->
+                <div class="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-sm border-t border-white/10">
+                    <div class="mx-auto max-w-4xl w-full px-6">
+                        <div class="grid grid-cols-4 gap-8 py-5">
+                            <div class="text-center">
+                                <div class="text-2xl lg:text-3xl font-bold text-green-400">5M+</div>
+                                <div class="mt-1 text-xs text-gray-400">Properties Scanned Daily</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl lg:text-3xl font-bold text-green-400">400K+</div>
+                                <div class="mt-1 text-xs text-gray-400">Offers Sent Daily</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl lg:text-3xl font-bold text-green-400">2M+</div>
+                                <div class="mt-1 text-xs text-gray-400">Agent Connections</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl lg:text-3xl font-bold text-green-400">Nationwide</div>
+                                <div class="mt-1 text-xs text-gray-400">Market Coverage</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- Mobile version -->
-            <div class="md:hidden h-full overflow-hidden">
-                <video autoplay muted loop playsinline class="w-full h-full object-cover object-top">
+            <!-- Mobile version — full screen -->
+            <div class="md:hidden flex-1 flex flex-col overflow-hidden relative">
+                <video autoplay muted loop playsinline class="w-full h-full object-cover object-top flex-1">
                     <source src="mobile version.mp4" type="video/mp4" />
                 </video>
-            </div>
-        </section>
-
-        <!-- Section 2: Stats -->
-        <section class="page-section reveal flex items-center justify-center border-y border-white/10">
-            <div class="mx-auto max-w-4xl w-full px-6">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-10">
-                    <div class="text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-green-400">5M+</div>
-                        <div class="mt-2 text-sm text-gray-500">Properties Scanned Daily</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-green-400">400K+</div>
-                        <div class="mt-2 text-sm text-gray-500">Offers Sent Daily</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-green-400">2M+</div>
-                        <div class="mt-2 text-sm text-gray-500">Agent Connections</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-green-400">Nationwide</div>
-                        <div class="mt-2 text-sm text-gray-500">Market Coverage</div>
+                <!-- Stats overlay at bottom -->
+                <div class="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-sm border-t border-white/10">
+                    <div class="grid grid-cols-2 gap-4 px-4 py-4">
+                        <div class="text-center">
+                            <div class="text-xl font-bold text-green-400">5M+</div>
+                            <div class="mt-1 text-[10px] text-gray-400">Properties Scanned Daily</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xl font-bold text-green-400">400K+</div>
+                            <div class="mt-1 text-[10px] text-gray-400">Offers Sent Daily</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xl font-bold text-green-400">2M+</div>
+                            <div class="mt-1 text-[10px] text-gray-400">Agent Connections</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xl font-bold text-green-400">Nationwide</div>
+                            <div class="mt-1 text-[10px] text-gray-400">Market Coverage</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: Analysis -->
+        <!-- Section 2: Analysis -->
         <section id="analysis" class="page-section reveal">
             <div class="mx-auto max-w-5xl px-6 py-20">
                 <div class="text-center mb-16">
@@ -409,7 +363,7 @@
         <!-- ══════════════════════════════════════════════ -->
         <!-- PILLAR 2: OFFER                               -->
         <!-- ══════════════════════════════════════════════ -->
-        <!-- Section 4: Offer -->
+        <!-- Section 3: Offer -->
         <section id="offers" class="page-section reveal border-t border-white/10">
             <div class="mx-auto max-w-5xl px-6 py-20">
                 <div class="text-center mb-16">
@@ -564,7 +518,7 @@
         <!-- ══════════════════════════════════════════════ -->
         <!-- PILLAR 3: OPPORTUNITY / RESULT                -->
         <!-- ══════════════════════════════════════════════ -->
-        <!-- Section 5: Result -->
+        <!-- Section 4: Result -->
         <section id="opportunity" class="page-section reveal border-t border-white/10">
             <div class="mx-auto max-w-5xl px-6 py-20">
                 <div class="text-center mb-16">
@@ -722,7 +676,6 @@
             </footer>
         </section>
 
-        </div><!-- /sections-wrapper -->
     </div>
 
     <script>
@@ -739,121 +692,40 @@
         handleForm('waitlist-bottom', 'waitlist-bottom-success');
         handleForm('waitlist-sticky', 'waitlist-sticky-success');
 
-        // ── Fullpage Sectional Scroll ──
-        const wrapper = document.getElementById('sections-wrapper');
-        const pages = document.querySelectorAll('.page-section');
-        const totalSections = pages.length;
-        let current = 0;
-        let isAnimating = false;
-        const COOLDOWN = 900; // ms — matches CSS transition
+        // Reveal sections on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        function goTo(index) {
-            if (index < 0 || index >= totalSections || index === current || isAnimating) return;
-            isAnimating = true;
-            current = index;
-            wrapper.style.transform = `translateY(-${current * 100}vh)`;
-            updateDots();
-            updateStickyCta();
+        // Sticky CTA: show after hero, hide at final CTA
+        const stickyCta = document.getElementById('sticky-cta');
+        const heroSection = document.querySelector('.page-section');
+        const ctaSection = document.getElementById('get-access');
+        let pastHero = false, atCta = false;
 
-            // Trigger reveal for the new section
-            pages[current].classList.add('visible');
-
-            setTimeout(() => { isAnimating = false; }, COOLDOWN);
+        function updateSticky() {
+            stickyCta.classList.toggle('visible', pastHero && !atCta);
         }
 
-        function next() { goTo(current + 1); }
-        function prev() { goTo(current - 1); }
+        new IntersectionObserver(([entry]) => {
+            pastHero = !entry.isIntersecting;
+            updateSticky();
+        }, { threshold: 0 }).observe(heroSection);
 
-        // Desktop: wheel
-        document.addEventListener('wheel', (e) => {
-            // Allow scrolling inside a section that has overflow
-            const section = pages[current];
-            const isScrollable = section.scrollHeight > section.clientHeight;
-            if (isScrollable) {
-                const atTop = section.scrollTop <= 0;
-                const atBottom = section.scrollTop + section.clientHeight >= section.scrollHeight - 2;
-                if (e.deltaY > 0 && !atBottom) return;
-                if (e.deltaY < 0 && !atTop) return;
-            }
-            e.preventDefault();
-            if (e.deltaY > 0) next();
-            else if (e.deltaY < 0) prev();
-        }, { passive: false });
+        new IntersectionObserver(([entry]) => {
+            atCta = entry.isIntersecting;
+            updateSticky();
+        }, { threshold: 0.1 }).observe(ctaSection);
 
-        // Mobile: touch swipe
-        let touchStartY = 0;
-        let touchStartTime = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-            touchStartTime = Date.now();
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            const deltaY = touchStartY - e.changedTouches[0].clientY;
-            const elapsed = Date.now() - touchStartTime;
-            const threshold = 50;
-
-            // Allow inner scroll
-            const section = pages[current];
-            const isScrollable = section.scrollHeight > section.clientHeight;
-            if (isScrollable) {
-                const atTop = section.scrollTop <= 0;
-                const atBottom = section.scrollTop + section.clientHeight >= section.scrollHeight - 2;
-                if (deltaY > 0 && !atBottom) return;
-                if (deltaY < 0 && !atTop) return;
-            }
-
-            if (Math.abs(deltaY) > threshold && elapsed < 600) {
-                if (deltaY > 0) next();
-                else prev();
-            }
-        }, { passive: true });
-
-        // Keyboard: arrow keys
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); next(); }
-            if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); prev(); }
-            if (e.key === 'Home') { e.preventDefault(); goTo(0); }
-            if (e.key === 'End') { e.preventDefault(); goTo(totalSections - 1); }
-        });
-
-        // Nav link clicks
-        document.querySelectorAll('.nav-link[data-target]').forEach(a => {
+        // Nav link smooth scroll
+        document.querySelectorAll('.nav-link').forEach(a => {
             a.addEventListener('click', (e) => {
                 e.preventDefault();
-                goTo(parseInt(a.dataset.target));
+                const href = a.getAttribute('href');
+                if (href && href !== '#') document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
             });
         });
-
-        // Dot navigation
-        const dotNav = document.getElementById('dot-nav');
-        pages.forEach((_, i) => {
-            const dot = document.createElement('button');
-            dot.className = 'dot';
-            dot.setAttribute('aria-label', 'Go to section ' + (i + 1));
-            dot.addEventListener('click', () => goTo(i));
-            dotNav.appendChild(dot);
-        });
-        const dots = dotNav.querySelectorAll('.dot');
-
-        function updateDots() {
-            dots.forEach((d, i) => d.classList.toggle('active', i === current));
-        }
-
-        // Reveal observer for initial section
-        pages[0].classList.add('visible');
-        updateDots();
-
-        // Sticky CTA
-        const stickyCta = document.getElementById('sticky-cta');
-        function updateStickyCta() {
-            if (current >= 1 && current < totalSections - 1) {
-                stickyCta.classList.add('visible');
-            } else {
-                stickyCta.classList.remove('visible');
-            }
-        }
     </script>
 </body>
 

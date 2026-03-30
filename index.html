@@ -203,7 +203,7 @@
             <!-- PC version — full screen -->
             <div class="hidden md:flex items-center justify-center flex-1 relative">
                 <video autoplay muted loop playsinline class="w-full h-full object-cover">
-                    <source src="pc version.mp4" type="video/mp4" />
+                    <source src="pc-version.mp4" type="video/mp4" />
                 </video>
                 <!-- Stats overlay at bottom -->
                 <div class="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-sm border-t border-white/10">
@@ -232,7 +232,7 @@
             <!-- Mobile version — full screen -->
             <div class="md:hidden flex-1 flex flex-col overflow-hidden relative">
                 <video autoplay muted loop playsinline class="w-full h-full object-cover object-top flex-1">
-                    <source src="mobile version.mp4" type="video/mp4" />
+                    <source src="mobile-version.mp4" type="video/mp4" />
                 </video>
                 <!-- Stats overlay at bottom -->
                 <div class="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-sm border-t border-white/10">
@@ -695,10 +695,21 @@
         handleForm('waitlist-sticky', 'waitlist-sticky-success');
 
         // Reveal sections on scroll
+        const revealEls = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }, { threshold: 0.05 });
+        revealEls.forEach(el => observer.observe(el));
+
+        // Also check on load in case elements are already in view
+        window.addEventListener('load', () => {
+            revealEls.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    el.classList.add('visible');
+                }
+            });
+        });
 
         // Sticky CTA: show after hero, hide at final CTA
         const stickyCta = document.getElementById('sticky-cta');

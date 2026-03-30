@@ -70,11 +70,16 @@
         }
 
         * {
+            scrollbar-width: none;
+        }
+
+        html {
+            overflow: auto;
             scrollbar-width: thin;
             scrollbar-color: #2A2B32 transparent;
         }
 
-        html, body {
+        body {
             overflow-x: hidden;
         }
 
@@ -152,9 +157,9 @@
         </header>
 
         <!-- Section 0: HERO -->
-        <section class="page-section relative overflow-hidden min-h-screen">
+        <section class="page-section relative overflow-hidden h-screen">
             <div class="pointer-events-none absolute inset-0 bg-glow-radial"></div>
-            <div class="mx-auto max-w-5xl px-6 pt-28 pb-10 text-center relative flex flex-col items-center justify-center min-h-screen">
+            <div class="mx-auto max-w-5xl px-6 pt-28 pb-10 text-center relative flex flex-col items-center justify-center h-full">
                 <div
                     class="mb-6 flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-4 py-1.5 text-xs font-medium text-green-400 w-fit">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
@@ -194,7 +199,7 @@
         </section>
 
         <!-- Section 1: Video + Stats (combined) -->
-        <section class="page-section reveal flex flex-col min-h-screen">
+        <section class="page-section reveal flex flex-col h-screen">
             <!-- PC version — full screen -->
             <div class="hidden md:flex items-center justify-center flex-1 relative">
                 <video autoplay muted loop playsinline class="w-full h-full object-cover">
